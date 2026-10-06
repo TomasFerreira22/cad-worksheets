@@ -39,38 +39,26 @@ var app = (function () {
   }
 
   // --- 3. ALTERNAR LUZES E MÚSICA (Alíneas a, b, c, d) ---
-  function setupToggle(buttonId, statusId, iconId, isMusic) {
-    var button = document.getElementById(buttonId);
-    var status = document.getElementById(statusId);
+  function setupToggle(switchId, iconId, isMusic) {
+    var toggle = document.getElementById(switchId);
     var icon = document.getElementById(iconId);
 
-    if (!button || !status || !icon) return;
+    if (!toggle || !icon) return;
 
-    button.addEventListener('click', function () {
-      var isOn = status.textContent.trim().toLowerCase() === 'on';
-
-      if (isOn) {
-        // Mudar para OFF
-        status.textContent = 'Off';
-        status.className = 'text-danger';
-
-        if (isMusic) {
-          icon.className = 'fa-solid fa-music text-secondary';
-        } else {
-          icon.className = 'fa-regular fa-lightbulb text-secondary';
-        }
+    function updateIcon() {
+      if (toggle.checked) {
+        icon.className = isMusic
+          ? 'fa-solid fa-music text-primary'
+          : 'fa-solid fa-lightbulb text-warning';
       } else {
-        // Mudar para ON
-        status.textContent = 'On';
-        status.className = 'text-success';
-
-        if (isMusic) {
-          icon.className = 'fa-solid fa-music text-primary';
-        } else {
-          icon.className = 'fa-solid fa-lightbulb text-warning';
-        }
+        icon.className = isMusic
+          ? 'fa-solid fa-volume-xmark text-danger'
+          : 'fa-regular fa-lightbulb text-secondary';
       }
-    });
+    }
+
+    toggle.addEventListener('change', updateIcon);
+    updateIcon(); // garante que o ícone corresponde ao estado inicial
   }
 
   // --- INICIALIZAÇÃO ---
@@ -81,12 +69,12 @@ var app = (function () {
   // Atualizar temperaturas a cada 5 segundos (5000 ms)
   setInterval(updateTemperatures, 5000);
 
-  // Configurar botões de luzes/música quando o DOM estiver carregado
+  // Configurar interruptores de luzes/música quando o DOM estiver carregado
   document.addEventListener('DOMContentLoaded', function () {
-    // Exemplo de ligação dos botões aos seus respetivos IDs
-    setupToggle('btn-kitchen-lights', 'status-kitchen-lights', 'icon-kitchen-lights', false);
-    setupToggle('btn-living-lights', 'status-living-lights', 'icon-living-lights', false);
-    setupToggle('btn-ambient-music', 'status-ambient-music', 'icon-ambient-music', true);
+    setupToggle('btn-kitchen-lights', 'icon-kitchen-lights', false);
+    setupToggle('btn-living-lights', 'icon-living-lights', false);
+    setupToggle('btn-ambient-lights', 'icon-ambient-lights', false);
+    setupToggle('btn-ambient-music', 'icon-ambient-music', true);
   });
 
 })();
